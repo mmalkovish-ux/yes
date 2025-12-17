@@ -9,17 +9,17 @@
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
 
     <style>
+        /* Exact same styling as your original */
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Press Start 2P', cursive; overflow: hidden; background-color: #0c0c0c; touch-action: none; }
 
-        /* --- STAGE 1: PIXEL SECURITY SCAN --- */
         #splash-page {
             position: fixed; inset: 0; background: #000; display: flex; align-items: center; 
             justify-content: center; z-index: 2000; transition: transform 1s cubic-bezier(0.65, 0, 0.35, 1);
         }
         .terminal-box {
-            width: 90%; max-width: 500px; background-color: #1a1a1a !important;
+            width: 90%; max-width: 600px; background-color: #1a1a1a !important;
             border: 4px solid #ff79c6 !important; box-shadow: 0 0 20px #ff79c6, inset 0 0 10px #ff79c6;
-            text-align: center; padding: 20px !important; position: relative;
+            text-align: center; padding: 30px !important; position: relative;
         }
         .scan-line {
             width: 100%; height: 2px; background: #ff79c6; position: absolute;
@@ -28,7 +28,6 @@
         @keyframes scanning { 0% { top: 0%; } 100% { top: 100%; } }
         .access-text { color: #50fa7b; font-size: 0.7rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* --- THE WORLD --- */
         #game-container {
             display: none; width: 100vw; height: 100vh;
             background: linear-gradient(to bottom, #1e0b36 0%, #0c0c0c 100%); 
@@ -36,15 +35,14 @@
         }
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.3; animation: twinkle 2s infinite alternate; }
         @keyframes twinkle { from { opacity: 0.1; } to { opacity: 0.8; } }
-        .decor { position: absolute; filter: drop-shadow(0 0 5px #ff79c6); opacity: 0.5; font-size: 1.2rem; }
+        .decor { position: absolute; filter: drop-shadow(0 0 5px #ff79c6); opacity: 0.5; font-size: 1.5rem; }
 
-        /* --- THE PLAYER --- */
-        #player { position: absolute; z-index: 100; transition: left 0.2s ease-out, top 0.2s ease-out; }
-        .nes-octocat { transform: scale(1.4); image-rendering: pixelated; filter: drop-shadow(0 0 5px white); }
+        /* Smoother movement transition for phone */
+        #player { position: absolute; z-index: 100; transition: left 0.2s linear, top 0.2s linear; pointer-events: none; }
+        .nes-octocat { transform: scale(1.6); image-rendering: pixelated; filter: drop-shadow(0 0 5px white); }
         .heart-particle { position: absolute; color: #ff4d6d; font-size: 12px; pointer-events: none; animation: flyUp 1s forwards; }
         @keyframes flyUp { to { transform: translateY(-60px) scale(1.5); opacity: 0; } }
 
-        /* --- SHARDS --- */
         .shard {
             position: absolute; width: 40px; height: 40px;
             background-image: url('https://stardewvalleywiki.com/mediawiki/images/5/56/Prismatic_Shard.png');
@@ -53,31 +51,26 @@
         }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        /* --- GIFT BOX --- */
         #gift-item {
             position: absolute; display: none; cursor: pointer; font-size: 3rem;
-            animation: bounce 1s infinite; filter: drop-shadow(0 0 15px gold);
+            animation: bounce 1s infinite; filter: drop-shadow(0 0 15px gold); z-index: 1000;
         }
         @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
-        /* --- UI & LETTER --- */
         #dialogue-ui {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 650px; display: none; z-index: 500;
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            width: 80%; max-width: 650px; display: none; z-index: 500; pointer-events: none;
         }
-        .stardew-card { background-color: #fce4ec !important; border: 4px solid #880e4f !important; color: #4a148c; line-height: 1.4; font-size: 0.6rem; padding: 10px !important;}
+        .stardew-card { background-color: #fce4ec !important; border: 6px solid #880e4f !important; color: #4a148c; line-height: 1.6; }
         
         #final-letter-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-            display: none; align-items: center; justify-content: center; z-index: 3000; padding: 20px;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            display: none; align-items: center; justify-content: center; z-index: 3000;
         }
         .pixel-letter {
-            background-color: #f8d4a4; border: 8px solid #63352b; padding: 25px; 
-            width: 100%; max-width: 500px; color: #3e2723; box-shadow: 0 0 0 4px #f8d4a4, 0 0 0 8px #63352b;
+            background-color: #f8d4a4; border: 8px solid #63352b; padding: 30px; 
+            width: 90%; max-width: 500px; color: #3e2723; box-shadow: 0 0 0 4px #f8d4a4, 0 0 0 8px #63352b;
         }
-        
-        .shake { animation: shake 0.3s; }
-        @keyframes shake { 0% { transform: translate(1px, 1px); } 20% { transform: translate(-3px, 0px); } 100% { transform: translate(0, 0); } }
     </style>
 </head>
 <body>
@@ -85,11 +78,11 @@
     <div id="splash-page">
         <div class="scan-line"></div>
         <div class="nes-container terminal-box is-dark with-title">
-            <p class="title" style="font-size: 0.6rem;">SECURITY GATEWAY</p>
+            <p class="title">SECURITY GATEWAY</p>
             <p class="access-text">Scanning for: [BOOKIE]</p>
-            <p style="font-size: 0.5rem; color: #f1fa8c;">IDENTITY_STATUS: VERIFYING...</p>
+            <p style="font-size: 0.6rem; color: #f1fa8c;">IDENTITY_STATUS: AWAITING_VERIFICATION</p>
             <br>
-            <button class="nes-btn is-error" style="font-size: 0.6rem;" onclick="startGame()">I AM BOOKIE</button>
+            <button class="nes-btn is-error" onclick="startGame()">I AM BOOKIE</button>
         </div>
     </div>
 
@@ -106,17 +99,17 @@
 
     <div id="final-letter-overlay">
         <div class="pixel-letter">
-            <p style="text-align:center; text-decoration: underline; font-size: 0.7rem;">TOP SECRET MESSAGE</p>
-            <div id="letter-body" style="font-size: 0.6rem; line-height: 1.6;">
+            <p style="text-align:center; text-decoration: underline;">TOP SECRET MESSAGE</p>
+            <div id="letter-body" style="font-size: 0.7rem; line-height: 1.8;">
                 Dear Bookie,<br><br>
                 You found all the shards! I hope this little world made you smile as much as you make me smile every day. 
                 <br><br>
-                [PASTE YOUR MESSAGE HERE]<br><br>
+                [Paste your long sweet message here!]<br><br>
                 Always,<br>
-                [YOUR NAME]
+                [Your Name]
             </div>
             <br>
-            <button class="nes-btn is-primary" style="width:100%; font-size: 0.6rem;" onclick="location.reload()">REPLAY</button>
+            <button class="nes-btn is-primary" style="width:100%" onclick="location.reload()">REPLAY</button>
         </div>
     </div>
 
@@ -133,7 +126,8 @@
         let collected = 0;
         const speed = 40;
 
-        const shardData = [
+        // Position shards based on Screen Size so they work on phone
+        const messages = [
             { x: 50, y: 100, text: "Shard 1 found! You're the best part of my day. ❤️" },
             { x: window.innerWidth - 100, y: 150, text: "Shard 2 found! My world is brighter with you. ✨" },
             { x: window.innerWidth / 2 - 20, y: window.innerHeight - 150, text: "Shard 3 found! Something special is waiting..." }
@@ -150,25 +144,25 @@
             }, 1000);
         }
 
-        // TOUCH TO MOVE (FOR PHONE)
+        // TOUCH TO MOVE (SMOOTH)
         game.addEventListener('touchstart', (e) => {
             e.preventDefault();
             pX = e.touches[0].clientX - 20;
             pY = e.touches[0].clientY - 20;
-            moveHandler();
-        });
+            moveLogic();
+        }, {passive: false});
 
-        // KEYBOARD TO MOVE (FOR PC)
+        // KEYBOARD TO MOVE
         document.addEventListener('keydown', (e) => {
             const key = e.key.toLowerCase();
             if (key === 'w' || key === 'arrowup') pY -= speed;
             if (key === 's' || key === 'arrowdown') pY += speed;
             if (key === 'a' || key === 'arrowleft') pX -= speed;
             if (key === 'd' || key === 'arrowright') pX += speed;
-            moveHandler();
+            moveLogic();
         });
 
-        function moveHandler() {
+        function moveLogic() {
             pX = Math.max(0, Math.min(window.innerWidth - 40, pX));
             pY = Math.max(0, Math.min(window.innerHeight - 40, pY));
             createHeart(pX + 20, pY + 20);
@@ -177,18 +171,28 @@
         }
 
         function initWorld() {
+            // Keep original decorations and stars
             for(let i=0; i<30; i++) {
                 let s = document.createElement('div');
                 s.className = 'star';
-                s.style.width = s.style.height = Math.random() * 2 + 'px';
+                s.style.width = s.style.height = Math.random() * 3 + 'px';
                 s.style.left = Math.random() * 100 + '%';
                 s.style.top = Math.random() * 100 + '%';
                 game.appendChild(s);
             }
+            const decors = ['👾', '💖', '⭐', '🌈'];
+            for(let i=0; i<8; i++) {
+                let d = document.createElement('div');
+                d.className = 'decor';
+                d.innerText = decors[Math.floor(Math.random()*decors.length)];
+                d.style.left = Math.random() * 90 + '%';
+                d.style.top = Math.random() * 90 + '%';
+                game.appendChild(d);
+            }
         }
 
         function spawnShards() {
-            shardData.forEach((m, i) => {
+            messages.forEach((m, i) => {
                 const s = document.createElement('div');
                 s.className = 'shard';
                 s.style.left = m.x + 'px';
@@ -214,17 +218,17 @@
         }
 
         function checkCollision() {
-            shardData.forEach((m, i) => {
+            messages.forEach((m, i) => {
                 const shard = document.getElementById(`shard-${i}`);
                 if (!shard) return;
                 const dist = Math.hypot(pX - m.x, pY - m.y);
-                if (dist < 60) {
+                if (dist < 70) { // Larger hit-area for fingers
                     shard.remove();
                     collected++;
                     showDialogue(m.text);
-                    if(collected === shardData.length) {
+                    if(collected === messages.length) {
                         setTimeout(() => {
-                            showDialogue("ALL SHARDS COLLECTED! TAP THE GIFT!");
+                            showDialogue("ALL SHARDS COLLECTED! TAP THE GIFT!", 4000);
                             gift.style.display = 'block';
                             gift.style.left = (window.innerWidth / 2 - 25) + 'px';
                             gift.style.top = (window.innerHeight / 2 - 25) + 'px';
@@ -234,10 +238,10 @@
             });
         }
 
-        function showDialogue(text) {
+        function showDialogue(text, time = 3000) {
             diag.style.display = 'block';
             msgText.innerText = text;
-            setTimeout(() => { diag.style.display = 'none'; }, 2500);
+            setTimeout(() => { diag.style.display = 'none'; }, time);
         }
 
         function openLetter() {
